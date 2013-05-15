@@ -14,7 +14,7 @@ from setuptools import setup, Extension, Feature
 
 readme = open(os.path.join(os.path.dirname(__file__), 'README.md')).read()
 
-ext = Extension('redis_packer._packer', sources=['redis_packer/_packer.c'])
+ext = Extension('redis_packer', sources=['_packer.c'])
 setup(
     name='redis_packer',
     version='0.18',
@@ -25,21 +25,8 @@ setup(
     description='Implements a faster Redis pack_command',
     long_description=readme,
     zip_safe=False,
-    classifiers=[
-        'Development Status :: 5 - Production/Stable',
-        'Environment :: Web Environment',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: BSD License',
-        'Operating System :: OS Independent',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 3',
-        'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
-        'Topic :: Software Development :: Libraries :: Python Modules',
-        'Topic :: Text Processing :: Markup :: HTML'
-    ],
-    packages=['redis_packer'],
-    include_package_data=True,
-    #cmdclass={'build_ext': ve_build_ext},
     ext_modules=[ext],
+    #packages=['redis_packer'],
+    #cmdclass={'build_ext': ve_build_ext},
     #features={'speedups': speedups}
 )

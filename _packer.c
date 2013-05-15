@@ -131,22 +131,7 @@ static PyMethodDef module_methods[] = {
     {NULL, NULL, 0, NULL}
 };
 
-//void initpacker(void) {
-//    PyImport_AddModule("redis_packer._packer");
-//    Py_InitModule("redis_packer._packer", module_methods);
-//}
-//
-//int main(int argc, char *argv[]) {
-//    Py_SetProgramName(argv[0]);
-//    Py_Initialize();
-//    initpacker();
-//    return 0;
-//}
-
 PyMODINIT_FUNC
-init_packer(void) {
-    //PyImport_AddModule("redis_packer");
-    //PyImport_AddModule("redis_packer._packer");
-    
-    Py_InitModule3("redis_packer._packer", module_methods, "");
+initredis_packer(void) {
+    Py_InitModule("redis_packer", module_methods);
 }
