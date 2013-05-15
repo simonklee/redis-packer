@@ -10,3 +10,17 @@ an itch.
 
 - Fix/check for leaks
 - Be smarter with allocs.
+
+# Usage
+
+```python
+import redis
+import redis_packer
+
+class MyConnection(redis.Connection):
+    pack_command = redis_packer.pack_command
+
+pool = redis.ConnectionPool(connection_class=MyConnection)
+
+conn = redis.StrictRedis(connection_pool=pool)
+```
