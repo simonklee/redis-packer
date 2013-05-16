@@ -98,7 +98,7 @@ int ParseArguments(char **argv, size_t *argvlen, Py_ssize_t size, PyObject *args
 static PyObject *packer_pack_command(PyObject *self, PyObject *args) {
     Py_ssize_t tuple_size = PyTuple_Size(args);
     char **argv = malloc(tuple_size * sizeof(char *));
-    size_t *argvlen = malloc(tuple_size * sizeof(size_t));
+    size_t *argvlen;
     char *cmd; 
     int len, i;
     PyObject *str_out;
@@ -107,17 +107,27 @@ static PyObject *packer_pack_command(PyObject *self, PyObject *args) {
         if (!PyErr_Occurred()) {
             PyErr_SetString(PyExc_TypeError, "You must supply at least one argument.");
         }
-        return NULL;
-    }
-
-    //len = pythonFormatCommandArgv(&cmd, (size_t) tuple_size, args);
-    if (!(ParseArguments(argv, argvlen, tuple_size, args))) { 
         free(argv);
         return NULL;
     }
 
-    // TODO: check size
+    argvlen = malloc(tuple_size * sizeof(size_t));
+
+    if (!(ParseArguments(argv, argvlen, tuple_size, args))) { 
+        free(argv);
+        free(argvlen);
+        return NULL;
+    } 
+
     len = redisFormatCommandArgv(&cmd, (size_t) tuple_size, (const char **)argv, argvlen);
+
+    if (len == -1) {
+        free(argv);
+        free(argvlen);
+        PyErr_SetString(PyExc_TypeError, "Out of memory");
+        return NULL;
+    }
+
     str_out = PyString_FromStringAndSize((const char *)cmd, (Py_ssize_t) len);
 
     free(cmd);
